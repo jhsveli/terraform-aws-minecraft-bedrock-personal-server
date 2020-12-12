@@ -1,11 +1,11 @@
 [
     {
         "permission": "operator",
-        "xuid": "<your xuid>"
+        "xuid": "00090000025F39F5"
     },
     {
         "permission": "operator",
-        "xuid": "<trusted friend's xuid>"
+        "xuid": "000901F24CCE110E"
     },
     {
         "permission": "operator",

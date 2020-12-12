@@ -1,7 +1,7 @@
 # This example has automatic snapshots enabled, server whitelist enabled, server properties + other config enabled, and auto-start for the minecraft server enabled
 
 locals {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 
 provider "aws" {
@@ -13,15 +13,15 @@ provider "aws" {
 # Module
 #########
 module "minecraft_server" {
-  source = "./../../terraform-aws-minecraft-bedrock-personal-server"
+  source = "./../../."
 
   # VPC
-  vpc_cidr = "172.16.0.0/24"
+  vpc_cidr = "172.31.0.0/16"
 
   # EC2
-  instance_type     = "t2.micro" # pick one to fit your usage
-  instance_key_pair = "<your EC2 keypair name>"
-  ami_id            = "ami-0ac80df6eff0e70b5" # ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20200611
+  instance_type     = "t3.nano" # pick one to fit your usage
+  instance_key_pair = "sveliland"
+  ami_id            = "ami-01996625fff6b8fcc" # ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20200611
   snapshot_config = {
     hour_interval = 24
     time          = "08:45" # 8:45am UTC / 4:45am EDT
@@ -32,32 +32,32 @@ module "minecraft_server" {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
-      cidr_block  = "<your home IP>/32"
-      description = "<your name>"
+      cidr_block  = "51.175.152.42/32"
+      description = "jhsveli@gmail.com"
     }
     icmp = {
       from_port   = -1
       to_port     = -1
       protocol    = "icmp"
-      cidr_block  = "<your home IP>/32"
-      description = "<your name>"
+      cidr_block  = "51.175.152.42/32"
+      description = "jhsveli@gmail.com"
     }
   }
 
   # Server init
-  ssh_private_key_filepath    = "C:/Users/<you>/.ssh/<your private key>.pem"
+  ssh_private_key_filepath    = "~/.ssh/sveliland.pem"
   server_package_filepath     = "./files/bedrock-server-1.16.1.02.zip"
   server_properties_filepath  = "./files/server.properties"
   server_whitelist_filepath   = "./files/whitelist.json"
   server_permissions_filepath = "./files/permissions.json"
 
   # Tag
-  tag_postfix = "my-server"
+  tag_postfix = "sveliland"
 }
 
 #########
 # Output
 #########
 output "instance_public_ip" {
-  value = module.minecraft.instance_public_ip
+  value = module.minecraft_server.instance_public_ip
 }
